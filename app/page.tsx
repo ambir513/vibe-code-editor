@@ -1,13 +1,16 @@
-import { Button } from "@/components/ui/button";
-import UserButton from "@/features/auth/components/UserButton";
-import Image from "next/image";
+import { currentUser } from "@/features/auth/actions";
+import Footer from "@/features/landing/components/Footer";
+import Header from "@/features/landing/components/Header";
+import HeroSection from "@/features/landing/components/HeroSection";
 
-export default function Home() {
+export default async function Home() {
+  const user = await currentUser();
+
   return (
-    <div className="flex flex-col items-center justify-center">
-      <p>Vide Code Editor</p>
-      <Button variant={"outline"}>Click Me!</Button>
-      <UserButton />
+    <div className="flex min-h-screen flex-col">
+      <Header user={user} />
+      <HeroSection />
+      <Footer />
     </div>
   );
 }
