@@ -1,3 +1,5 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -7,40 +9,42 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { currentUser } from "../actions";
-import { signOut } from "@/auth";
 import { LogOut } from "lucide-react";
+import { SignOutAction } from "./Signout"; // ✅ import server action
 
-const UserButton = async () => {
-  const user = await currentUser();
-  const label = user?.name?.split(" ") || "";
+export const UserButton = ({ user }: { user: any }) => {
+  if (!user) return null;
+
+  const nameParts = user?.name?.split(" ") ?? [];
+  const initials =
+    nameParts.length >= 2
+      ? nameParts[0][0] + nameParts[1][0]
+      : (nameParts[0]?.[0] ?? "?");
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger className="rounded-full">
         <Avatar>
-          <AvatarImage src={user?.image || ""} />
-          <AvatarFallback>{label[0][0] + label[1][0]}</AvatarFallback>
+          <AvatarImage src={user?.image || ""} alt={user?.name || "User"} />
+          <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent>
+
+      <DropdownMenuContent align="end" className="w-48">
         <DropdownMenuLabel>My Account</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>{user?.email}</DropdownMenuItem>
-        <DropdownMenuItem>
-          <form
-            action={async () => {
-              "use server";
-              await signOut();
-            }}
-            className="w-full"
-          >
+        {user?.email && (
+          <DropdownMenuItem disabled>{user.email}</DropdownMenuItem>
+        )}
+        <DropdownMenuSeparator />
+        <DropdownMenuItem asChild>
+          <form action={SignOutAction} className="w-full">
             <button
               type="submit"
-              className="flex items-center justify-center gap-x-5"
+              className="flex w-full items-center gap-2 text-red-600 dark:text-red-400"
             >
-              <LogOut />
-              <span> Logout</span>
+              <LogOut className="h-4 w-4" />
+              <span>Logout</span>
             </button>
           </form>
         </DropdownMenuItem>
@@ -48,5 +52,3 @@ const UserButton = async () => {
     </DropdownMenu>
   );
 };
-
-export default UserButton;
