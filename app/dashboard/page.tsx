@@ -1,9 +1,16 @@
 import EmptyState from "@/components/ui/EmptyState";
+import {
+  deleteProjectById,
+  duplicateProjectById,
+  editProjectById,
+  getAllPlaygroundForUser,
+} from "@/features/dashboard/actions";
 import AddNewButton from "@/features/dashboard/components/AddNewButton";
 import AddRepoButton from "@/features/dashboard/components/AddRepoButton";
+import ProjectTable from "@/features/dashboard/components/ProjectTable";
 
-const Page = () => {
-  const playgrounds: any[] = [];
+const Page = async () => {
+  const playgrounds = await getAllPlaygroundForUser();
   return (
     <div className="mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-start px-4 py-10">
       <div className="grid w-full grid-cols-1 gap-6 md:grid-cols-2">
@@ -19,7 +26,14 @@ const Page = () => {
           />
         ) : (
           // todo play playground tab
-          <p>Playground Table</p>
+          <ProjectTable
+            //@ts-ignore
+            // Todo: need to update the type of playground
+            projects={playgrounds || []}
+            OnDeleteProjects={deleteProjectById}
+            OnUpdateProjects={editProjectById}
+            OnDuplicateProjects={duplicateProjectById}
+          />
         )}
       </div>
     </div>
