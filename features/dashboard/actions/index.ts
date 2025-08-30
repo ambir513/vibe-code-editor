@@ -9,8 +9,8 @@ export const createPlayground = async (data: {
   title: string;
   template: Template;
   description?: string;
-  userId: string;
 }) => {
+
   const { template, title, description } = data;
 
   const user = await currentUser();
