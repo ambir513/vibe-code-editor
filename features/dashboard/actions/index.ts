@@ -10,7 +10,6 @@ export const createPlayground = async (data: {
   template: Template;
   description?: string;
 }) => {
-
   const { template, title, description } = data;
 
   const user = await currentUser();
@@ -75,14 +74,17 @@ export const editProjectById = async (
   data: { title: string; description: string },
 ) => {
   try {
-    await db.playground.update({
+    const editProject = await db.playground.update({
       where: {
         id,
       },
       data: data,
     });
+    revalidatePath("/dashboard");
+    return editProject;
   } catch (error) {
     console.log(error);
+    return null;
   }
 };
 

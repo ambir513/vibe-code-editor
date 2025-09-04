@@ -27,12 +27,14 @@ const Page = async () => {
         ) : (
           // todo play playground tab
           <ProjectTable
-            //@ts-ignore
-            // Todo: need to update the type of playground
-            projects={playgrounds || []}
-            OnDeleteProjects={deleteProjectById}
-            OnUpdateProjects={editProjectById}
-            OnDuplicateProjects={duplicateProjectById}
+          // Todo: need to update the type of playground
+          //@ts-ignore
+          projects={playgrounds || []}
+          onDeleteProject={deleteProjectById}
+          //@ts-ignore
+          onUpdateProject={editProjectById}
+          //@ts-ignore
+            onDuplicateProject={duplicateProjectById}
           />
         )}
       </div>
