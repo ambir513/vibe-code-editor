@@ -63,11 +63,20 @@ model Account {
   starmark StarMark[]
   userId String
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  // Todo: add here templatefiles as well
+  templateFiles TemplateFile[]
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
  }
 
+model TemplateFile {
+  id String @id @default(cuid()) @map("_id")
+  content Json
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+  playgroundId String
+  playground Playground @relation(fields: [playgroundId], references: [id], onDelete: Cascade)
+
+}
  model StarMark {
   id String @id @default(cuid()) @map("_id")
   userId String
@@ -79,3 +88,4 @@ model Account {
   updatedAt        DateTime     @updatedAt
   @@unique([userId, playgroundId])
  }
+
